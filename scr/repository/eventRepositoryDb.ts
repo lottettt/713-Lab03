@@ -18,11 +18,16 @@ export async function getEventById(id: number): Promise<Event | undefined> {
 }
 
 export async function addEvent(newEvent: Event): Promise<Event> {
-  const { category, title, description, location, date, time, petsAllowed, organizer } = newEvent;
-  const [result] = await connection.execute(
-    'INSERT INTO events (category, title, description, location, date, time, petsAllowed, organizer) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-    [category, title, description, location, date, time, petsAllowed, organizer]
-  );
-  newEvent.id = (result as any).insertId;
+  const {category, title, description, location, date, time, petsAllowed, organizer } = newEvent;
+try {
+    const [result] = await connection.execute(
+        'INSERT INTO events (category, title, description, location, date, time, petsAllowed, organizer) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [category, title, description, location, date, time, petsAllowed, organizer]
+    );
+    newEvent.id = (result as any).insertId;
+} catch (error) {
+    console.error('Error inserting event:', error);
+    throw new Error('Could not insert event');
+}
   return newEvent;
 }
