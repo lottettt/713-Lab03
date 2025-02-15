@@ -76,8 +76,8 @@ function getEventsByCategory(category: string): Event[] {
     return filteredEvents;
 }
 
-function getAllEvents(): Event[] {
-    return events;
+function getAllEvents(): Promise<Event[]> {
+    return Promise.resolve(events);
 }
 
 function getEventById(id: number): Event | undefined {

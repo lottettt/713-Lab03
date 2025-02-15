@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { Event } from "./model/entity/types";
 import { getEventsByCategory, getEventById, addEvent, getAllEvents } from "./services/eventServices";
+import { get } from "http";
 
 
 const app = express();
@@ -134,7 +135,8 @@ app.get("/events", (req, res) => {
     
     res.json(filteredEvents);
     } else {
-    res.json(getAllEvents());
+    const result = getAllEvents();
+    res.json(result);
     }
 });
 
