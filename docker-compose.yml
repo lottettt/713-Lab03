@@ -22,6 +22,8 @@ services:
       PMA_PASSWORD: rootpassword
     ports:
       - "9000:80"
-
+    # We can access container at port 9000
+    # docker will redirect request to port 80 of container
+    
 volumes:
   mysql_data:

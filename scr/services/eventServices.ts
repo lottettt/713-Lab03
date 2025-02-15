@@ -1,25 +1,24 @@
-import exp from 'constants';
 import { Event } from '../models/event';
-import { events } from '../repository/eventRepository';
+import * as repo from '../repository/eventRepositoryDb';
 
-
-function getEventsByCategory(category: string): Promise<Event[]> {
-    const filteredEvents = events.filter((event) => event.category === category);
-    return Promise.resolve(filteredEvents);
+async function getEventsByCategory(category: string): Promise<Event[]> {
+    const filteredEvents = await repo.getEventsByCategory(category);
+    return filteredEvents;
 }
 
-function getAllEvents(): Promise<Event[]> {
-    return Promise.resolve(events);
+async function getAllEvents(): Promise<Event[]> {
+    const allEvents = await repo.getAllEvents();
+    return allEvents;
 }
 
-function getEventById(id: number): Promise<Event | undefined> {
-    return Promise.resolve(events.find((event) => event.id === id));
+async function getEventById(id: number): Promise<Event | undefined> {
+    const event = await repo.getEventById(id);
+    return event;
 }
 
-function addEvent(event: Event): Promise<Event> {
-    event.id = events.length + 1;
-    events.push(event);
-    return Promise.resolve(event);
+async function addEvent(event: Event): Promise<Event> {
+    const addedEvent = await repo.addEvent(event);
+    return addedEvent;
 }
 
 export { getEventsByCategory, getAllEvents, getEventById, addEvent };
