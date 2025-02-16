@@ -1,6 +1,9 @@
 import express, { Request, Response } from "express";
 import { Event } from "./models/event";
 import * as repo from "./services/eventServices";
+import multer from 'multer';
+import { upLoadFile } from './services/uploadFileService';
+
 
 const getEventsByCategory = async (category: string): Promise<Event[]> => {
   const events = await repo.getEventsByCategory(category);
@@ -65,7 +68,27 @@ app.post("/events", async (req, res) => {
     res.json(newEvent);
 });
 
+const upload = multer({ storage: multer.memoryStorage() });
+
+app.post('/upload', upload.single('file'), async (req: any, res: any) => {
+  try {
+    const file = req.file;
+    if (!file) {
+      res.status(400).send('No file uploaded.');
+    }
+    const bucket = 'images';
+    const filePath = `uploads/${file.originalname}`;
+
+    await upLoadFile(bucket, filePath, file);
+
+    res.status(201).send('File uploaded successfully');
+  } catch (error) {
+    res.status(500).send('Error uploading file');
+}
+});
+
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
+

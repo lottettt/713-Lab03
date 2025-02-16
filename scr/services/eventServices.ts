@@ -1,6 +1,7 @@
 import { Event } from '../models/event';
 import * as repo from '../repository/eventRepositoryDb';
 
+
 async function getEventsByCategory(category: string): Promise<Event[]> {
     const filteredEvents = await repo.getEventsByCategory(category);
     return filteredEvents;
@@ -20,5 +21,6 @@ async function addEvent(event: Event): Promise<Event> {
     const addedEvent = await repo.addEvent(event);
     return addedEvent;
 }
+
 
 export { getEventsByCategory, getAllEvents, getEventById, addEvent };
