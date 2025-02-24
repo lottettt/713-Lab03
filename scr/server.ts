@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { Event } from "./models/event";
 import * as repo from "./services/eventServices";
 import multer from 'multer';
-import { upLoadFile } from './services/uploadFileService';
+import { uploadFile } from './services/uploadFileService';
 
 
 const getEventsByCategory = async (category: string): Promise<Event[]> => {
@@ -79,9 +79,9 @@ app.post('/upload', upload.single('file'), async (req: any, res: any) => {
     const bucket = 'images';
     const filePath = `uploads/${file.originalname}`;
 
-    await upLoadFile(bucket, filePath, file);
+    const outputUrl = await uploadFile(bucket, filePath, file);
 
-    res.status(201).send('File uploaded successfully');
+    res.status(200).send(outputUrl);
   } catch (error) {
     res.status(500).send('Error uploading file');
 }
