@@ -9,20 +9,27 @@ function generateSaltedFileName(originalname: string): string {
 }
 
 export async function uploadFile(bucket: string, filePath: string, file: Express.Multer.File): Promise<string> {
-
-        const saltedFilename = generateSaltedFileName(file.originalname);
-        const saltedFilePath = `${filePath}/${saltedFilename}`;
-        const params = {    
-        Bucket : bucket,
-        Key : saltedFilePath,
-        Body : file.buffer,
-        ContentType : file.mimetype,
+    
+    const saltedFilename = generateSaltedFileName(file.originalname);
+    const saltedFilePath = `${filePath}/${saltedFilename}`;
+    // console.log('Uploading file:', saltedFilePath);
+    const params = {    
+        Bucket: bucket,
+        Key: saltedFilePath,
+        Body: file.buffer,
+        ContentType: file.mimetype,
     };
 
     try {
         const data = await s3Client.send(new PutObjectCommand(params));
         console.log('File uploaded successfully', data);
-        const publicUrl = `https://whjonuylkfmvzcvptywe.supabase.co/storage/v1/object/public/images/${saltedFilePath}`;
+
+        const outputUrl = process.env.SUPABASE_OUTPUT_URL;
+        if (!outputUrl) {
+            throw new Error("Missing required environment variable: SUPABASE_OUTPUT_URL");
+        }
+
+        const publicUrl = `${outputUrl}/${saltedFilePath}`;
         console.log('File uploaded successfully:', publicUrl);
         return publicUrl;
     } catch (error) {
@@ -30,5 +37,3 @@ export async function uploadFile(bucket: string, filePath: string, file: Express
         throw error;
     }
 }
-
-// https://whjonuylkfmvzcvptywe.supabase.co/storage/v1/object/public/images/uploads/chib.jpeg

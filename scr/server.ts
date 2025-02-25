@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express, { Request, Response } from "express";
 import { Event } from "./models/event";
 import * as repo from "./services/eventServices";
@@ -5,14 +8,11 @@ import multer from 'multer';
 import { uploadFile } from './services/uploadFileService';
 
 
-const getEventsByCategory = async (category: string): Promise<Event[]> => {
-  const events = await repo.getEventsByCategory(category);
-  return events;
-}
-
 const app = express();
 app.use(express.json());
 const port = 3000;
+
+
 
 // หน้่าที่่ของ API แค่รับ request และส่ง response กลับไป เท่านั้น
 // ไม่ควรมีการคำนวณหรือการทำงานอื่นๆ ในส่วนนี้
@@ -30,6 +30,10 @@ app.get("/test", (req, res) => {
   res.send(output);
 });
 
+const getEventsByCategory = async (category: string): Promise<Event[]> => {
+  const events = await repo.getEventsByCategory(category);
+  return events;
+};
 
 app.get("/events", async (req, res) => {
     if (req.query.category) {
@@ -76,8 +80,12 @@ app.post('/upload', upload.single('file'), async (req: any, res: any) => {
     if (!file) {
       res.status(400).send('No file uploaded.');
     }
-    const bucket = 'images';
-    const filePath = `uploads`;
+    // const bucket = 'images';
+    // const filePath = `uploads`;
+    const bucket = process.env.SUPABASE_BUCKET_NAME as string;
+    const filePath = process.env.UPLOAD_DIR as string;
+    // console.log('bucket:', bucket);
+    // console.log('filePath:', filePath);
 
     const outputUrl = await uploadFile(bucket, filePath, file);
 
