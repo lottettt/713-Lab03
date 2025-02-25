@@ -1,0 +1,7 @@
+{
+        "watch": ["scr"],
+        "ext": "ts",
+        "ignore": ["scr/**/*.test.ts"],
+        "exec": "ts-node scr/server.ts"
+      }
+    
