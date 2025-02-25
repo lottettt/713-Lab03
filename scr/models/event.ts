@@ -1,5 +1,5 @@
 import e from "express";
-
+import { Organizer } from "./organizer";
 interface Event {
     id: number;
     category: string;
@@ -9,7 +9,7 @@ interface Event {
     date: string;
     time: string;
     petsAllowed: boolean;
-    organizer: string;
+    organizer: Organizer;
   }
 
 export { Event };
