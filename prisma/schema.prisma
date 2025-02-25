@@ -14,7 +14,7 @@ datasource db {
 }
 
 model event {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   category    String
   title       String
   description String
