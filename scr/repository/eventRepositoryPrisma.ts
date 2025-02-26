@@ -21,33 +21,42 @@ export function getEventById(id: number){
 
 export function addEvent(newEvent: Event){
   return prisma.event.create({
-      data: {
-        category: newEvent.category,
-        title: newEvent.title,
-        description: newEvent.description,
-        location: newEvent.location,
-        date: newEvent.date,
-        time: newEvent.time,
-        petsAllowed: newEvent.petsAllowed
+    data: {
+      category: newEvent.category || '',
+      title: newEvent.title || '',
+      description: newEvent.description || '',
+      location: newEvent.location || '',
+      date: newEvent.date || '',
+      time: newEvent.time || '',
+      petsAllowed: newEvent.petsAllowed || false
+        
       }
   });
 }
 
 export function getAllEventsWithOrganizer() {
   return prisma.event.findMany({
-      include: {
-          organizer: true,
-      },
+    select: {
+      id: true,
+      category: true,
+      organizerId: false,
+      organizer: {
+        select: {
+          name: true,
+        },
+    },
+  },
   });
 }
 
 export function getEventByIdWithOrganizer(id: number) {
   return prisma.event.findUnique({
-      where: {
-          id: id,
-      },
-      include: {
-          organizer: true,
-      },
+    select: {
+      title: true,
+      time: true,
+      date: true,
+      organizerId: true,
+    },
+    where: { id },
   });
 }
