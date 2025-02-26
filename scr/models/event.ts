@@ -1,5 +1,6 @@
 import e from "express";
 import { Organizer } from "./organizer";
+import { Participant } from "./participant";
 interface Event {
     id?: number;
     category?: string;
@@ -11,6 +12,7 @@ interface Event {
     petsAllowed?: boolean;
     organizerId?: number | null;
     organizer?: Organizer | null;
+    participants?: Participant[];
 }
 
 export { Event };
